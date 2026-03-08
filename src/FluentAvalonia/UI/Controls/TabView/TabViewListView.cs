@@ -453,7 +453,7 @@ public class TabViewListView : ListBox
         var disArgs = new DragItemsStartingEventArgs
         {
             Items = new[] { ItemsView.GetAt(_dragIndex) },
-            Data = new Data.DataPackage()
+            Data = new DataTransfer()
         };
         DragItemsStarting?.Invoke(this, disArgs);
 
@@ -467,13 +467,10 @@ public class TabViewListView : ListBox
 
         _isInDrag = true;
 
-        var effects = disArgs.Data.RequestedOperation;
-
         if (hasReorder)
         {
             _processReorder = true;
             BeginReorder(args);
-            effects |= DragDropEffects.Move;
         }
         else
         {
@@ -487,8 +484,7 @@ public class TabViewListView : ListBox
             }
         }
 
-        var dropResult =
-            await DragDrop.DoDragDrop(args, disArgs.Data, effects);
+        var dropResult = await DragDrop.DoDragDropAsync(args, disArgs.Data, DragDropEffects.Move);
 
         _isInDrag = false;
         if (hasReorder)

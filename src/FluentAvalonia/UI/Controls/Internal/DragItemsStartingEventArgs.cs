@@ -1,4 +1,5 @@
-﻿using FluentAvalonia.UI.Data;
+﻿using Avalonia.Input;
+using FluentAvalonia.UI.Data;
 
 /// <summary>
 /// Represents the method that will handle the DragItemsStarting event
@@ -18,7 +19,7 @@ public class DragItemsStartingEventArgs : EventArgs
     /// <summary>
     /// Gets the data payload associated with an items drag action
     /// </summary>
-    public DataPackage Data { get; internal init; }
+    public DataTransfer Data { get; internal init; }
 
     /// <summary>
     /// Gets the loosely typed collection of objects that are selected for the item drag action.
