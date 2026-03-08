@@ -19,7 +19,7 @@ public partial class TabViewWindowingSample : AppWindow
         TabView.TabItemsChanged += TabView_TabItemsChanged;
     }
 
-    public static readonly string DataIdentifier = "MyTabItem";
+    public static readonly DataFormat<string> TabViewDataFormat = DataFormat.CreateStringApplicationFormat("TabView");
 
     public static void LaunchRoot()
     {
@@ -98,15 +98,22 @@ public partial class TabViewWindowingSample : AppWindow
     private void TabDragStarting(TabView sender, TabViewTabDragStartingEventArgs args)
     {
         // Set the data payload to the drag args
-        args.Data.SetData(DataIdentifier, args.Tab);
+        args.Data.Add(DataTransferItem.Create(TabViewDataFormat, args.Tab.Name));
+    }
 
-        // Indicate we can move
-        args.Data.RequestedOperation = DragDropEffects.Move;
+    private TabViewItem GetTabViewItem(string name)
+    {
+        foreach (TabViewItem tabView in TabView.TabItems)
+        {
+            if (tabView.Name == name)
+                return tabView;
+        }
+        return null;
     }
 
     private void TabStripDrop(object sender, DragEventArgs e)
     {
-        if (e.Data.Contains(DataIdentifier) && e.Data.Get(DataIdentifier) is TabViewItem tvi)
+        if (e.DataTransfer.Contains(TabViewDataFormat) && GetTabViewItem(e.DataTransfer.TryGetText()) is TabViewItem tvi)
         {
             var destinationTabView = sender as TabView;
 
@@ -156,7 +163,7 @@ public partial class TabViewWindowingSample : AppWindow
 
     private void TabStripDragOver(object sender, DragEventArgs e)
     {
-        if (e.Data.Contains(DataIdentifier))
+        if (e.DataTransfer.Contains(TabViewDataFormat))
         {
             // For dragover, use the standard DragEffects property
             e.DragEffects = DragDropEffects.Move;

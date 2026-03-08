@@ -1,4 +1,5 @@
-﻿using FluentAvalonia.UI.Data;
+﻿using Avalonia.Input;
+using FluentAvalonia.UI.Data;
 
 namespace FluentAvalonia.UI.Controls;
 
@@ -26,7 +27,7 @@ public class TabViewTabDragStartingEventArgs : EventArgs
     /// <summary>
     /// Gets the data payload associated with a drag action
     /// </summary>
-    public DataPackage Data => _innerArgs.Data;
+    public DataTransfer Data => _innerArgs.Data;
 
     /// <summary>
     /// Gets the item taht was selected for the drag action
